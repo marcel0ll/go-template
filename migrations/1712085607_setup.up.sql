@@ -1,4 +1,4 @@
-CREATE TABLE `userinfo` (
+CREATE TABLE IF NOT EXISTS `userinfo` (
 	`id` INTEGER PRIMARY KEY AUTOINCREMENT,
 	`username` VARCHAR(64) NULL,
 	`created` DATE NULL

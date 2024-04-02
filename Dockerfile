@@ -39,8 +39,8 @@ EXPOSE 8080
 
 WORKDIR /app
 
-COPY migrations/ .
-COPY static/ .
+COPY migrations/ /app/migrations/
+COPY static/ /app/static/
 COPY --from=tailwind /node/main.css /static/styles/main.css
 COPY --from=builder /app/server .
 

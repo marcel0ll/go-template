@@ -67,6 +67,7 @@ func main() {
 }
 
 func applyMigrations(db *sql.DB, migrationsDir string) error {
+	println("Running migrations...")
 	migrationFiles, err := filepath.Glob(filepath.Join(migrationsDir, "*.up.sql"))
 	if err != nil {
 		return err
@@ -75,6 +76,7 @@ func applyMigrations(db *sql.DB, migrationsDir string) error {
 	sort.Strings(migrationFiles)
 
 	for _, migrationFile := range migrationFiles {
+		println("Migrating", migrationFile)
 		content, err := os.ReadFile(migrationFile)
 		if err != nil {
 			return err
