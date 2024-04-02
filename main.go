@@ -61,7 +61,7 @@ func main() {
 
 	port := envPortOr("8080")
 	log.Println("Listenting at", port)
-	err = http.ListenAndServe(":8080", nil)
+	err = http.ListenAndServe(port, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
