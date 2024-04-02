@@ -15,6 +15,8 @@ FROM golang:1.22.1 as build
 
 WORKDIR /app
 
+RUN go install github.com/a-h/templ/cmd/templ@latest
+
 COPY go.mod .
 COPY go.sum .
 
@@ -23,6 +25,7 @@ RUN go mod download
 COPY components .
 COPY main.go .
 
+RUN templ generate
 RUN go build -o server .
 
 FROM alpine as deploy
