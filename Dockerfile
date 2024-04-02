@@ -35,7 +35,8 @@ RUN go build \
 
 FROM alpine:3.19 as deploy
 
-EXPOSE 8080
+ARG PORT=8080
+EXPOSE ${PORT}
 
 WORKDIR /app
 
