@@ -7,3 +7,4 @@
 components/*_templ.go
 node_modules/
 
+static/styles/main.css
