@@ -23,7 +23,7 @@ RUN go mod download
 COPY components .
 COPY main.go .
 
-RUN go build . -o server
+RUN go build -o server .
 
 FROM alpine as deploy
 
