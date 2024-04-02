@@ -27,6 +27,8 @@ RUN go build . -o server
 
 FROM alpine as deploy
 
+EXPOSE 8080
+
 WORKDIR /app
 
 COPY static .
@@ -34,4 +36,5 @@ COPY --from=tailwind main.css /static/styles/main.css
 COPY --from=build server .
 
 CMD ["./server"]
+
 
