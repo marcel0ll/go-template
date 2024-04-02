@@ -1,0 +1,8 @@
+/tmp
+/sqlite.db
+/tailwind
+/go-templ-tailwind-htmx
+
+components/*_templ.go
+node_modules/
+

@@ -1,0 +1,7 @@
+{
+  "name": "sqlite-go-templ-tailwind-htmx-boilerplate",
+  "version": "1.0.0",
+  "devDependencies": {
+    "daisyui": "^4.9.0"
+  }
+}
