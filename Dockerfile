@@ -21,9 +21,7 @@ RUN go install github.com/a-h/templ/cmd/templ@latest
 COPY go.mod .
 COPY go.sum .
 
-RUN --mount=type=cache,target=/go/pkg/mod \
-  --mount=type=cache,target=/root/.cache/go-build \
-  go mod download
+RUN go mod download
 
 COPY components/*.templ ./components/
 COPY main.go .
@@ -41,7 +39,8 @@ EXPOSE 8080
 
 WORKDIR /app
 
-COPY static .
+COPY migrations/ .
+COPY static/ .
 COPY --from=tailwind /node/main.css /static/styles/main.css
 COPY --from=builder /app/server .
 
