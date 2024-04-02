@@ -18,7 +18,7 @@ WORKDIR /app
 COPY go.mod .
 COPY go.sum .
 
-RUN go install
+RUN go mod download
 
 COPY components .
 COPY main.go .
@@ -33,4 +33,5 @@ COPY static .
 COPY --from=tailwind main.css /static/styles/main.css
 COPY --from=build server .
 
-RUN ./server
+CMD ["./server"]
+
