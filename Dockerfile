@@ -1,4 +1,4 @@
-FROM node:18 as tailwind
+FROM node:20.12-alpine3.19 as tailwind
 
 WORKDIR /node
 
@@ -7,11 +7,12 @@ COPY package-lock.json .
 
 RUN npm install
 
-COPY components .
+COPY components/*.templ ./components/
+COPY tailwind.config.js .
 
 RUN npx tailwindcss -o ./main.css --minify 
 
-FROM golang:1.22.1 as build
+FROM golang:1.22.1-alpine3.19 as builder
 
 WORKDIR /app
 
@@ -22,13 +23,14 @@ COPY go.sum .
 
 RUN go mod download
 
-COPY components .
+COPY components/*.templ ./components/
 COPY main.go .
 
 RUN templ generate
-RUN go build -o server .
+RUN go build -o server main.go
 
-FROM alpine as deploy
+
+FROM alpine:3.19 as deploy
 
 EXPOSE 8080
 
@@ -36,7 +38,7 @@ WORKDIR /app
 
 COPY static .
 COPY --from=tailwind /node/main.css /static/styles/main.css
-COPY --from=build /app/server .
+COPY --from=builder /app/server .
 
 CMD ["./server"]
 
