@@ -45,7 +45,7 @@ func main() {
 	id, err := res.LastInsertId()
 	checkErr(err)
 
-	println("id", id)
+	log.Println("id", id)
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("GET /static/", http.StripPrefix("/static/", fs))
@@ -59,15 +59,25 @@ func main() {
 		HTML(res, req, components.Index(count))
 	})
 
-	println("Listenting at 8080")
+	port := envPortOr("8080")
+	log.Println("Listenting at", port)
 	err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+func envPortOr(port string) string {
+	// If `PORT` variable in environment exists, return it
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		return ":" + envPort
+	}
+	// Otherwise, return the value of `port` variable from function argument
+	return ":" + port
+}
+
 func applyMigrations(db *sql.DB, migrationsDir string) error {
-	println("Running migrations...")
+	log.Println("Running migrations...")
 	migrationFiles, err := filepath.Glob(filepath.Join(migrationsDir, "*.up.sql"))
 	if err != nil {
 		return err
@@ -76,7 +86,7 @@ func applyMigrations(db *sql.DB, migrationsDir string) error {
 	sort.Strings(migrationFiles)
 
 	for _, migrationFile := range migrationFiles {
-		println("Migrating", migrationFile)
+		log.Println("Migrating", migrationFile)
 		content, err := os.ReadFile(migrationFile)
 		if err != nil {
 			return err
