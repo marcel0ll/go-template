@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/a-h/templ"
-	"github.com/marcel0ll/go-templ-tailwind-htmx/components"
+	"github.com/marcel0ll/go-template/components"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -25,7 +25,7 @@ func checkErr(err error) {
 }
 
 func main() {
-	db, err := sql.Open("sqlite3", "./sqlite.db")
+	db, err := sql.Open("sqlite3", "./db/sqlite.db")
 	checkErr(err)
 
 	stmt, err := db.Prepare("INSERT INTO userinfo(username, created) values(?,?)")

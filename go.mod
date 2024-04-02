@@ -1,4 +1,4 @@
-module github.com/marcel0ll/go-templ-tailwind-htmx
+module github.com/marcel0ll/go-template
 
 go 1.22.1
 
