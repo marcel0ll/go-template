@@ -12,7 +12,7 @@ COPY tailwind.config.js .
 
 RUN npx tailwindcss -o ./main.css --minify 
 
-FROM golang:1.22.1-alpine3.19 as builder
+FROM golang:1.22.1-bullseye as builder
 
 WORKDIR /app
 
@@ -27,7 +27,10 @@ COPY components/*.templ ./components/
 COPY main.go .
 
 RUN templ generate
-RUN go build -o server main.go
+RUN go build \
+  -ldflags="-linkmode external -extldflags -static" \
+  -o server \
+  main.go
 
 
 FROM alpine:3.19 as deploy
