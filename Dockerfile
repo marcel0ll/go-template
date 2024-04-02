@@ -41,7 +41,7 @@ WORKDIR /app
 
 COPY migrations/ /app/migrations/
 COPY static/ /app/static/
-COPY --from=tailwind /node/main.css /static/styles/main.css
+COPY --from=tailwind /node/main.css /app/static/styles/main.css
 COPY --from=builder /app/server .
 
 CMD ["./server"]
