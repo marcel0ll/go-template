@@ -21,14 +21,16 @@ RUN go install github.com/a-h/templ/cmd/templ@latest
 COPY go.mod .
 COPY go.sum .
 
-RUN go mod download
+RUN --mount=type=cache,target=/go/pkg/mod \
+  --mount=type=cache,target=/root/.cache/go-build \
+  go mod download
 
 COPY components/*.templ ./components/
 COPY main.go .
 
 RUN templ generate
 RUN go build \
-  -ldflags="-linkmode external -extldflags -static" \
+  -ldflags="-extldflags -static" \
   -o server \
   main.go
 

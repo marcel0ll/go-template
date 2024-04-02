@@ -4,6 +4,10 @@ import (
 	"database/sql"
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
+	"sort"
+	"time"
 
 	"github.com/a-h/templ"
 	"github.com/marcel0ll/go-template/components"
@@ -28,10 +32,14 @@ func main() {
 	db, err := sql.Open("sqlite3", "./db/sqlite.db")
 	checkErr(err)
 
+	migrationsDir := "./migrations"
+	err = applyMigrations(db, migrationsDir)
+	checkErr(err)
+
 	stmt, err := db.Prepare("INSERT INTO userinfo(username, created) values(?,?)")
 	checkErr(err)
 
-	res, err := stmt.Exec("marcel0ll", "2012-12-09")
+	res, err := stmt.Exec("marcel0ll", time.Now())
 	checkErr(err)
 
 	id, err := res.LastInsertId()
@@ -56,4 +64,27 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func applyMigrations(db *sql.DB, migrationsDir string) error {
+	migrationFiles, err := filepath.Glob(filepath.Join(migrationsDir, "*.up.sql"))
+	if err != nil {
+		return err
+	}
+
+	sort.Strings(migrationFiles)
+
+	for _, migrationFile := range migrationFiles {
+		content, err := os.ReadFile(migrationFile)
+		if err != nil {
+			return err
+		}
+
+		_, err = db.Exec(string(content))
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
